@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kasrat">
+<meta name="theme-color" content="#0f6e6e">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Mom &amp; Dad Workout Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap">
+<style>
+/* VOICE everyday, calm and very clear: written for parents around 60
+   IDEA a physio's exercise handout that turns into a coach when you press Start
+   PICTURE today's workout card with its week strip, then large exercise cards with steps, set dots and timers
+   COLOUR white ground, deep ink; teal lower body, burnt orange upper body, indigo core, grey Sunday (same as the printed chart)
+   TYPE Atkinson Hyperlegible (made for low vision) + Noto Sans Devanagari for Hindi
+   LAYOUT laptop: today card + week strip across the top, day tabs, two columns of cards; phone: one column, sticky timer bar */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#121416);--ink:light-dark(#1b1f24,#eef0f2);--mute:light-dark(#4a5058,#b5bac1);--line:light-dark(#d9dde2,#31363c);--panel:light-dark(#f4f5f7,#1c1f23);--card:light-dark(#ffffff,#181b1f);--stop:light-dark(#b42318,#ff8a7a);--L:light-dark(#0f6e6e,#4fc2bd);--U:light-dark(#a64b14,#f2a36b);--C:light-dark(#3b4fa8,#9aa8f0);--W:light-dark(#5b6370,#b5bac1)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 'Atkinson Hyperlegible','Noto Sans Devanagari',system-ui,sans-serif;overflow-x:clip;padding-bottom:90px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(4vw,16px)}
+header.wrap{padding-top:max(24px,env(safe-area-inset-top,0px)) !important;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:24px;padding-bottom:12px}
+h1{margin:0;font-size:clamp(30px,4.4vw,44px);line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
+h2{margin:0;font-size:24px;line-height:1.2}
+h3{margin:0;font-size:20px;line-height:1.25}
+button{font:inherit;color:inherit;cursor:pointer;border-radius:12px;border:1.5px solid var(--line);background:var(--card);min-height:44px;padding:8px 16px}
+button:focus-visible,a:focus-visible{outline:3px solid var(--dc,var(--L));outline-offset:2px}
+.seg{display:flex;border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.seg button{border:0;border-radius:0;font-weight:700}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.today{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;background:var(--dc);color:#fff;border-radius:20px;padding:clamp(20px,3vw,32px);margin-top:8px}
+.today .k{font-size:15px;opacity:.9}
+.today h2{font-size:clamp(28px,3.6vw,38px);margin:4px 0 6px}
+.today p{margin:0 0 16px;font-size:17px;opacity:.95}
+.go{background:#fff;color:var(--dc);border:0;font-weight:700;font-size:19px;padding:12px 24px;min-height:52px}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;align-self:center}
+.week button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:13px;line-height:1.25}
+.week button b{font-size:15px}
+.week button.on{background:#fff;color:var(--dc)}
+.week .ck{font-size:13px;font-weight:700;min-height:16px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 14px}
+.tabs button{font-weight:700;border-color:var(--c)}
+.tabs button[aria-selected=true]{background:var(--c);color:#fff}
+.block{background:var(--panel);border-radius:16px;padding:16px 20px;margin-bottom:16px}
+.block h3{margin-bottom:8px}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(15em,1fr));gap:8px 20px;margin:0;padding:0;list-style:none}
+.mini li{display:flex;gap:10px;align-items:baseline}
+.mini li b{white-space:nowrap}
+.mini li span{color:var(--mute);font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:16px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.card.full{border-color:var(--dc)}
+.ch{display:flex;gap:12px;align-items:flex-start}
+.num{flex:none;width:34px;height:34px;border-radius:17px;background:var(--dc);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dose{display:inline-block;margin-top:4px;font-weight:700;color:var(--dc);white-space:nowrap}
+ol{margin:0;padding-left:1.4em}
+ol li{margin-bottom:4px}
+.note{border-radius:10px;padding:8px 12px;font-size:16px;background:var(--panel)}
+.note b{display:block;font-size:14px;color:var(--mute)}
+.easy{background:color-mix(in srgb,var(--dc) 10%,var(--card))}
+.cf{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:auto;padding-top:6px}
+.dots{display:flex;gap:8px;align-items:center}
+.dots span{font-size:14px;color:var(--mute);margin-right:2px}
+.dot{width:44px;height:44px;padding:0;border-radius:22px;font-weight:700}
+.dot.done{background:var(--dc);border-color:var(--dc);color:#fff}
+.vid{color:var(--dc);font-weight:700;font-size:16px}
+.safe{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:8px 0 24px}
+.safe .block{margin:0}
+.safe h3{font-size:18px}
+.safe ul{margin:0;padding-left:1.1em;font-size:16px}
+.stop h3{color:var(--stop)}
+.stop{border:1.5px solid var(--stop)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--bg);display:none;align-items:center;justify-content:center;gap:16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));z-index:30}
+.bar.on{display:flex}
+.bar .tt{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar button{background:var(--bg);color:var(--ink);border:0;font-weight:700}
+.pl{position:fixed;inset:0;background:var(--bg);z-index:20;display:none;overflow-y:auto}
+.pl.on{display:block}
+.pin{max-width:760px;margin:0 auto;padding:20px max(4vw,16px) 120px;display:flex;flex-direction:column;gap:14px}
+.ptop{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.prog{height:8px;border-radius:4px;background:var(--panel);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--dc)}
+.pin h2{font-size:clamp(28px,5vw,40px);line-height:1.1}
+.pin .dose{font-size:22px}
+.pin ol{font-size:19px}
+.pbtn{display:flex;gap:10px;flex-wrap:wrap}
+.pbtn button{flex:1 1 30%;font-weight:700;font-size:18px;min-height:56px}
+.pbtn .main{background:var(--dc);border-color:var(--dc);color:#fff;flex-basis:100%}
+.fin{text-align:center;padding:40px 0}
+.fin h2{color:var(--dc)}
+.small{font-size:14px;color:var(--mute)}
+@media(max-width:900px){.safe{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.today{grid-template-columns:minmax(0,1fr)}.grid{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:no-preference){.prog i{transition:width .4s}}
+</style>
+</head>
+<body>
+<header class="wrap">
+<h1 id="ttl">Mom &amp; Dad’s Workout Guide</h1>
+<div class="seg" role="group" aria-label="Language">
+<button type="button" data-a="lang" data-v="en" id="l-en">English</button>
+<button type="button" data-a="lang" data-v="hi" id="l-hi">हिंदी</button>
+</div>
+</header>
+<main class="wrap">
+<section id="today" class="today"></section>
+<nav id="tabs" class="tabs" role="tablist"></nav>
+<section id="view"></section>
+<section id="safe" class="safe"></section>
+<p class="small" id="foot"></p>
+</main>
+<div id="pl" class="pl" role="dialog" aria-modal="true" aria-label="Workout"></div>
+<div id="bar" class="bar" role="timer" aria-live="polite"><span id="bl"></span><span class="tt" id="bt">0:00</span><button type="button" data-a="tstop" id="bs">Stop</button></div>
+<script>
+{
+const UI={
+en:{title:'Mom & Dad’s Workout Guide',today:'Today',start:'Start today’s workout',open:'Start this workout',ex:'exercises',min:'about 40 min',warm:'Warm-up · 5 min (every day)',cool:'Cool-down stretches · 5 min (every day)',tip:'Keep in mind',easy:'Easier option',video:'Watch a video',sets:'Sets',rest:'Rest 60 sec',hold:'Hold',restNow:'Rest',holdNow:'Hold',setDone:'Set done',startHold:'Start hold',next:'Next',prev:'Back',close:'Close',stop:'Stop',set:'Set',of:'of',fin:'Well done! Today’s workout is complete.',finP:'Now do the cool-down stretches, then drink some water.',back:'Back to the guide',doneT:'Done today',
+days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+foot:'Plan made for home with 3 kg dumbbells and resistance bands. Ticks are saved on this phone only. Check with your doctor before starting.'},
+hi:{title:'माँ और पापा की कसरत गाइड',today:'आज',start:'आज की कसरत शुरू करें',open:'यह कसरत शुरू करें',ex:'व्यायाम',min:'लगभग 40 मिनट',warm:'वार्म-अप · 5 मिनट (हर दिन)',cool:'कूल-डाउन स्ट्रेच · 5 मिनट (हर दिन)',tip:'ध्यान रखें',easy:'आसान तरीका',video:'वीडियो देखें',sets:'सेट',rest:'आराम 60 सेकंड',hold:'रोकें',restNow:'आराम',holdNow:'रोककर रखें',setDone:'सेट पूरा',startHold:'शुरू करें',next:'अगला',prev:'पीछे',close:'बंद करें',stop:'रोकें',set:'सेट',of:'में से',fin:'शाबाश! आज की कसरत पूरी हुई।',finP:'अब कूल-डाउन स्ट्रेच करें और थोड़ा पानी पिएँ।',back:'गाइड पर वापस',doneT:'आज पूरा',
+days:['रवि','सोम','मंगल','बुध','गुरु','शुक्र','शनि'],
+foot:'यह योजना घर के लिए है: 3 किलो डम्बल और रेज़िस्टेंस बैंड। टिक सिर्फ़ इसी फ़ोन में सेव होते हैं। शुरू करने से पहले डॉक्टर से सलाह लें।'}
+};
+const DAYS={
+lower:{c:'--L',en:{t:'Day 1 · Lower body',s:'Legs, glutes, hips, calves',w:'Mon · Thu'},hi:{t:'दिन 1 · निचला शरीर',s:'पैर, कूल्हे, पिंडली',w:'सोम · गुरु'}},
+upper:{c:'--U',en:{t:'Day 2 · Upper body',s:'Chest, back, shoulders, arms',w:'Tue · Fri'},hi:{t:'दिन 2 · ऊपरी शरीर',s:'छाती, पीठ, कंधे, बाँहें',w:'मंगल · शुक्र'}},
+core:{c:'--C',en:{t:'Day 3 · Core + balance',s:'Tummy, back, balance, mobility',w:'Wed · Sat'},hi:{t:'दिन 3 · पेट + संतुलन',s:'पेट, पीठ, संतुलन, लचीलापन',w:'बुध · शनि'}},
+sunday:{c:'--W',en:{t:'Sunday · Walk + stretch',s:'Easy day for recovery',w:'Sun'},hi:{t:'रविवार · सैर + स्ट्रेच',s:'आराम का हल्का दिन',w:'रवि'}}
+};
+const BYDAY=['sunday','lower','upper','core','lower','upper','core'];
+const WARM={en:[['March in place','1 min, swing the arms'],['Arm circles','30 sec forward, 30 sec back'],['Shoulder rolls','30 sec'],['Ankle circles','30 sec each foot, hold a chair'],['Heel-toe rocks','1 min, hold a chair']],
+hi:[['एक जगह मार्च','1 मिनट, हाथ हिलाते हुए'],['हाथ गोल घुमाना','30 सेकंड आगे, 30 सेकंड पीछे'],['कंधे घुमाना','30 सेकंड'],['टखने घुमाना','हर पैर 30 सेकंड, कुर्सी पकड़ें'],['एड़ी-पंजे पर झूलना','1 मिनट, कुर्सी पकड़ें']]};
+const COOL={en:[['Calf stretch','hands on wall, one leg back, heel down · 20 sec each'],['Front thigh stretch','hold a chair, hold one ankle behind you · 20 sec each'],['Chest stretch','forearm on a door frame, turn away gently · 20 sec each'],['Upper back hug','hug yourself, round the upper back · 20 sec']],
+hi:[['पिंडली स्ट्रेच','दीवार पर हाथ, एक पैर पीछे, एड़ी नीचे · हर तरफ़ 20 सेकंड'],['जांघ स्ट्रेच','कुर्सी पकड़ें, एक टखना पीछे पकड़ें · हर तरफ़ 20 सेकंड'],['छाती स्ट्रेच','बाँह दरवाज़े की चौखट पर, धीरे से मुड़ें · हर तरफ़ 20 सेकंड'],['पीठ का स्ट्रेच','ख़ुद को गले लगाएँ, ऊपरी पीठ गोल करें · 20 सेकंड']]};
+const EX={
+lower:[
+{id:'squat',sets:3,yt:'chair squat for seniors',en:{n:'Chair squat, dumbbell at chest',d:'3 × 12',st:['Stand in front of a sturdy chair, feet shoulder-width apart.','Hold one dumbbell upright at your chest with both hands.','Push hips back and bend the knees. Sit down slowly until you touch the chair.','Push through your heels and stand up tall.'],tip:'Knees follow the toes and never cave in. Keep the chest up.',ez:'No dumbbell, or use a higher chair and push on the armrests.'},hi:{n:'कुर्सी स्क्वाट, डम्बल सीने पर',d:'3 × 12',st:['मज़बूत कुर्सी के आगे खड़े हों, पैर कंधों जितने खुले।','एक डम्बल दोनों हाथों से सीने के पास सीधा पकड़ें।','कूल्हे पीछे करें और घुटने मोड़ें। धीरे से कुर्सी छूने तक बैठें।','एड़ियों पर ज़ोर देकर सीधे खड़े हो जाएँ।'],tip:'घुटने पंजों की दिशा में रहें, अंदर न मुड़ें। छाती ऊपर रखें।',ez:'बिना डम्बल करें, या ऊँची कुर्सी लें और हत्थों का सहारा लें।'}},
+{id:'bridge',sets:3,yt:'glute bridge with band seniors',en:{n:'Glute bridge, band on knees',d:'3 × 12',st:['Lie on your back on the bed or a mat, knees bent, feet flat.','Loop the band just above the knees and press the knees slightly outward.','Squeeze the buttocks and lift the hips until shoulders, hips and knees make a line.','Hold 2 seconds at the top, then lower slowly.'],tip:'Push through the heels. Don’t arch the lower back.',ez:'Skip the band and lift the hips only a little.'},hi:{n:'ग्लूट ब्रिज, घुटनों पर बैंड',d:'3 × 12',st:['बिस्तर या चटाई पर पीठ के बल लेटें, घुटने मुड़े, पैर ज़मीन पर।','घुटनों के ठीक ऊपर बैंड लगाएँ और घुटनों को थोड़ा बाहर दबाएँ।','कूल्हे सिकोड़ें और कमर उठाएँ, जब तक कंधे, कूल्हे और घुटने एक सीध में न आ जाएँ।','ऊपर 2 सेकंड रुकें, फिर धीरे नीचे आएँ।'],tip:'एड़ियों से ज़ोर लगाएँ। कमर को ज़्यादा न मोड़ें।',ez:'बैंड के बिना करें और कमर थोड़ी ही उठाएँ।'}},
+{id:'lunge',sets:2,yt:'supported reverse lunge seniors',en:{n:'Reverse lunge, holding a chair',d:'2 × 8 each leg',st:['Stand beside a chair or counter and hold it with one hand.','Step one foot back about two feet and land on the toes.','Bend both knees and lower a little. Keep the front knee over the ankle.','Push through the front heel and bring the back foot forward. Finish one side, then switch.'],tip:'Go only as low as feels comfortable. Keep the body upright.',ez:'Split squat: keep the feet in place, one in front of the other, and just bend and straighten the knees.'},hi:{n:'कुर्सी पकड़कर पीछे लंज',d:'2 × 8 हर पैर',st:['कुर्सी या काउंटर के पास खड़े होकर एक हाथ से पकड़ें।','एक पैर लगभग दो फ़ुट पीछे रखें, पंजे पर।','दोनों घुटने मोड़कर थोड़ा नीचे जाएँ। आगे का घुटना टखने के ऊपर रहे।','आगे की एड़ी से ज़ोर देकर पीछे का पैर वापस लाएँ। एक तरफ़ पूरा करें, फिर बदलें।'],tip:'उतना ही नीचे जाएँ जितना आराम से हो। शरीर सीधा रखें।',ez:'स्प्लिट स्क्वाट: पैर आगे-पीछे जगह पर रखें, बस घुटने मोड़ें और सीधे करें।'}},
+{id:'side',sets:2,yt:'banded lateral walk seniors',en:{n:'Band side steps',d:'2 × 10 each way',st:['Loop the band around both legs just above the knees.','Stand with feet hip-width apart and knees slightly bent.','Step sideways with one foot, then let the other foot follow. Keep the band tight.','Take 10 steps one way, then 10 steps back.'],tip:'Stay a little low, toes forward, and don’t let the feet touch.',ez:'No band, or hold the kitchen counter and step along it.'},hi:{n:'बैंड लगाकर साइड में चलना',d:'2 × 10 हर तरफ़',st:['घुटनों के ठीक ऊपर दोनों पैरों में बैंड लगाएँ।','पैर कूल्हों जितने खुले, घुटने थोड़े मुड़े।','एक पैर से साइड में कदम रखें, फिर दूसरा पैर लाएँ। बैंड खिंचा रहे।','10 कदम एक तरफ़, फिर 10 कदम वापस।'],tip:'थोड़ा नीचे रहें, पंजे सामने, पैर आपस में न छुएँ।',ez:'बिना बैंड, या किचन काउंटर पकड़कर उसके साथ चलें।'}},
+{id:'rdl',sets:3,yt:'dumbbell romanian deadlift beginners',en:{n:'Dumbbell Romanian deadlift',d:'3 × 10',st:['Stand tall with a dumbbell in each hand in front of the thighs.','Bend the knees slightly.','Push the hips back and slide the dumbbells down the front of the legs to just below the knees, back flat.','Squeeze the buttocks and stand back up.'],tip:'Back stays flat the whole time: bend at the hips, not the waist. Stop if the lower back hurts.',ez:'Practise without weights, sliding the hands down the thighs.'},hi:{n:'डम्बल लेकर आगे झुकना (कमर सीधी)',d:'3 × 10',st:['हर हाथ में डम्बल लेकर जांघों के आगे पकड़ें, सीधे खड़े हों।','घुटने हल्के से मोड़ें।','कूल्हे पीछे करें और डम्बल पैरों के आगे से घुटनों के ठीक नीचे तक ले जाएँ, कमर सीधी।','कूल्हे सिकोड़ें और वापस सीधे खड़े हों।'],tip:'कमर पूरे समय सीधी रहे, कूल्हों से झुकें। कमर में दर्द हो तो रुक जाएँ।',ez:'बिना वज़न के अभ्यास करें, हाथ जांघों पर सरकाते हुए।'}},
+{id:'calf',sets:2,yt:'single leg calf raise wall seniors',en:{n:'One-leg calf raise, hold the wall',d:'2 × 12 each',st:['Stand facing a wall with both hands on it.','Lift one foot off the floor.','Rise up onto the toes of the standing foot as high as you can.','Lower slowly, taking 2 seconds.'],tip:'Go slowly. Keep the body tall.',ez:'Use both feet together.'},hi:{n:'एक पैर पर एड़ी उठाना, दीवार पकड़ें',d:'2 × 12 हर पैर',st:['दीवार की ओर मुँह करके दोनों हाथ दीवार पर रखें।','एक पैर ज़मीन से उठाएँ।','खड़े पैर के पंजों पर जितना हो सके ऊपर उठें।','2 सेकंड में धीरे नीचे आएँ।'],tip:'धीरे करें। शरीर सीधा रखें।',ez:'दोनों पैरों से एक साथ करें।'}}],
+upper:[
+{id:'push',sets:3,yt:'countertop push up seniors',en:{n:'Counter push-up',d:'3 × 10',st:['Put your hands on the edge of a sturdy kitchen counter, a little wider than the shoulders.','Walk the feet back until the body is in a straight line.','Bend the elbows and lower the chest toward the counter.','Push back up.'],tip:'Body straight like a plank. Elbows angled back, not flared out.',ez:'Wall push-up: stand closer and push against the wall.'},hi:{n:'किचन काउंटर पर पुश-अप',d:'3 × 10',st:['मज़बूत किचन काउंटर के किनारे पर हाथ रखें, कंधों से थोड़े ज़्यादा खुले।','पैर पीछे ले जाएँ जब तक शरीर एक सीधी लाइन में न हो।','कोहनियाँ मोड़कर छाती काउंटर की ओर लाएँ।','वापस ऊपर धकेलें।'],tip:'शरीर तख़्ते जैसा सीधा। कोहनियाँ पीछे की ओर, बाहर नहीं।',ez:'दीवार पुश-अप: दीवार के पास खड़े होकर करें।'}},
+{id:'row',sets:3,yt:'resistance band row door anchor seniors',en:{n:'Band row',d:'3 × 12',st:['Tie the band to a closed door handle, or sit and loop it around your feet.','Hold both ends with straight arms and step back until the band is tight.','Pull the hands toward your belly, elbows close to the body, and squeeze the shoulder blades.','Let the arms go forward slowly.'],tip:'Don’t shrug the shoulders up. Make sure the door is fully shut.',ez:'Step closer to the door or use a lighter band.'},hi:{n:'बैंड रो',d:'3 × 12',st:['बैंड को बंद दरवाज़े के हैंडल से बाँधें, या बैठकर पैरों में फँसाएँ।','दोनों सिरे सीधे हाथों से पकड़ें और पीछे हटें जब तक बैंड खिंच न जाए।','हाथ पेट की ओर खींचें, कोहनियाँ शरीर के पास, कंधे की हड्डियाँ पास लाएँ।','हाथ धीरे से वापस आगे ले जाएँ।'],tip:'कंधे ऊपर न उचकाएँ। दरवाज़ा पूरी तरह बंद हो।',ez:'दरवाज़े के पास खड़े हों या हल्का बैंड लें।'}},
+{id:'press',sets:3,yt:'seated dumbbell shoulder press seniors',en:{n:'Seated overhead press',d:'3 × 10',st:['Sit tall on a chair with a dumbbell in each hand at shoulder height, palms forward.','Press straight up until the arms are nearly straight.','Lower slowly back to the shoulders.'],tip:'Don’t arch the back. Breathe out as you press up.',ez:'Mom: no weights for the first 2 weeks, or one arm at a time.'},hi:{n:'बैठकर डम्बल ऊपर दबाना',d:'3 × 10',st:['कुर्सी पर सीधे बैठें, हर हाथ में डम्बल कंधे की ऊँचाई पर, हथेलियाँ सामने।','सीधे ऊपर दबाएँ जब तक हाथ लगभग सीधे न हो जाएँ।','धीरे से वापस कंधों तक लाएँ।'],tip:'कमर पीछे न मोड़ें। ऊपर दबाते समय साँस छोड़ें।',ez:'माँ: पहले 2 हफ़्ते बिना वज़न, या एक-एक हाथ से।'}},
+{id:'pull',sets:3,yt:'resistance band lat pulldown door seniors',en:{n:'Band pulldown',d:'3 × 12',st:['Put the band’s knot over the top of a door and shut the door firmly.','Sit or kneel facing the door and hold the ends with arms up.','Pull the elbows down toward the ribs and squeeze the shoulder blades.','Let the arms rise back slowly.'],tip:'Chest up, don’t lean back. Check the band is held tight by the door before each set.',ez:'Use a lighter band, or sit a little closer.'},hi:{n:'बैंड पुल-डाउन',d:'3 × 12',st:['बैंड की गाँठ दरवाज़े के ऊपर रखें और दरवाज़ा मज़बूती से बंद करें।','दरवाज़े की ओर मुँह करके बैठें, हाथ ऊपर करके सिरे पकड़ें।','कोहनियाँ पसलियों की ओर नीचे खींचें, कंधे की हड्डियाँ पास लाएँ।','हाथ धीरे से वापस ऊपर जाने दें।'],tip:'छाती ऊपर, पीछे न झुकें। हर सेट से पहले देखें कि बैंड दरवाज़े में कसा है।',ez:'हल्का बैंड लें, या थोड़ा पास बैठें।'}},
+{id:'curl',sets:2,yt:'hammer curl seniors',en:{n:'Hammer curl',d:'2 × 12',st:['Stand or sit with the dumbbells at your sides, palms facing each other.','Bend the elbows and lift the weights toward the shoulders. Upper arms stay still.','Lower slowly.'],tip:'No swinging. Slow on the way down.',ez:'Sit down and do one arm at a time.'},hi:{n:'हैमर कर्ल',d:'2 × 12',st:['डम्बल बगल में लेकर खड़े हों या बैठें, हथेलियाँ आमने-सामने।','कोहनियाँ मोड़कर वज़न कंधों की ओर उठाएँ। ऊपरी बाँह स्थिर रहे।','धीरे नीचे लाएँ।'],tip:'झटका न दें। नीचे धीरे आएँ।',ez:'बैठकर एक-एक हाथ से करें।'}},
+{id:'tri',sets:2,yt:'seated overhead triceps extension dumbbell seniors',en:{n:'Overhead triceps extension',d:'2 × 12',st:['Sit tall and hold one dumbbell with both hands above your head.','Bend the elbows and lower it slowly behind the head.','Straighten the arms back up.'],tip:'Elbows point forward, close to the head. Go slowly.',ez:'Stiff shoulders: lie on the bed and lower the dumbbell beside the head instead.'},hi:{n:'सिर के ऊपर ट्राइसेप्स (एक डम्बल)',d:'2 × 12',st:['सीधे बैठें और एक डम्बल दोनों हाथों से सिर के ऊपर पकड़ें।','कोहनियाँ मोड़कर उसे धीरे से सिर के पीछे ले जाएँ।','हाथ वापस सीधे करें।'],tip:'कोहनियाँ सामने और सिर के पास रहें। धीरे करें।',ez:'कंधे जकड़े हों तो बिस्तर पर लेटकर करें।'}},
+{id:'apart',sets:2,yt:'band pull apart seniors posture',en:{n:'Band pull-apart',d:'2 × 15',st:['Hold the band in both hands at chest height, arms straight, hands shoulder-width apart.','Pull the band apart by moving the arms out to the sides.','Return slowly.'],tip:'Squeeze the shoulder blades together. Great for posture.',ez:'Hold the band with the hands wider apart.'},hi:{n:'बैंड खींचकर फैलाना',d:'2 × 15',st:['बैंड दोनों हाथों से छाती की ऊँचाई पर पकड़ें, हाथ सीधे, कंधों जितने खुले।','हाथ साइड में ले जाकर बैंड को फैलाएँ।','धीरे से वापस लाएँ।'],tip:'कंधे की हड्डियाँ पास लाएँ। पोस्चर के लिए बहुत अच्छा।',ez:'हाथ और ज़्यादा खोलकर बैंड पकड़ें।'}}],
+core:[
+{id:'bug',sets:2,yt:'dead bug exercise seniors',en:{n:'Dead bug',d:'2 × 8 each side',st:['Lie on your back on the bed or a mat, arms up to the ceiling, knees bent above the hips.','Gently press the lower back down.','Slowly lower the right arm and left leg toward the floor.','Bring them back and switch sides.'],tip:'Lower back stays down. Breathe out as you stretch out.',ez:'Keep both feet on the floor and slide one heel out at a time.'},hi:{n:'डेड बग',d:'2 × 8 हर तरफ़',st:['बिस्तर या चटाई पर पीठ के बल लेटें, हाथ छत की ओर, घुटने कूल्हों के ऊपर मुड़े।','कमर को हल्का नीचे दबाएँ।','दायाँ हाथ और बायाँ पैर धीरे से नीचे की ओर ले जाएँ।','वापस लाएँ और तरफ़ बदलें।'],tip:'कमर नीचे टिकी रहे। फैलाते समय साँस छोड़ें।',ez:'दोनों पैर ज़मीन पर रखें और एक-एक एड़ी आगे सरकाएँ।'}},
+{id:'bird',sets:2,yt:'bird dog exercise seniors',en:{n:'Bird-dog',d:'2 × 8 each side',st:['Get on hands and knees on the bed or a mat, hands under shoulders, knees under hips.','Stretch one arm forward and the opposite leg back.','Hold 2 seconds, come back, then switch.'],tip:'Keep the back flat like a table and the hips level.',ez:'Lift only the arm or only the leg. Kneeling hurts? Do it standing, hands on the counter, kicking one leg back.'},hi:{n:'बर्ड-डॉग',d:'2 × 8 हर तरफ़',st:['बिस्तर या चटाई पर हाथों और घुटनों के बल आएँ, हाथ कंधों के नीचे, घुटने कूल्हों के नीचे।','एक हाथ आगे और उलटा पैर पीछे सीधा करें।','2 सेकंड रुकें, वापस आएँ, फिर बदलें।'],tip:'पीठ मेज़ जैसी सीधी और कूल्हे बराबर रहें।',ez:'सिर्फ़ हाथ या सिर्फ़ पैर उठाएँ। घुटनों में दर्द हो तो खड़े होकर काउंटर पकड़कर पैर पीछे ले जाएँ।'}},
+{id:'pallof',sets:2,yt:'pallof press band seniors',en:{n:'Pallof press with band',d:'2 × 10 each side',st:['Tie the band to a door handle at chest height and stand side-on to the door.','Hold the band at the middle of your chest with both hands.','Press the hands straight out in front. Don’t let the band turn you.','Bring the hands back. Finish the reps, then face the other way.'],tip:'Hips and shoulders face forward the whole time.',ez:'Stand closer to the door.'},hi:{n:'पैलॉफ प्रेस (बैंड से)',d:'2 × 10 हर तरफ़',st:['बैंड को दरवाज़े के हैंडल से छाती की ऊँचाई पर बाँधें, दरवाज़े की ओर बगल करके खड़े हों।','बैंड दोनों हाथों से छाती के बीच में पकड़ें।','हाथ सीधे सामने दबाएँ। बैंड आपको घुमाने न पाए।','हाथ वापस लाएँ। गिनती पूरी करके दूसरी तरफ़ मुँह करें।'],tip:'कूल्हे और कंधे पूरे समय सामने रहें।',ez:'दरवाज़े के पास खड़े हों।'}},
+{id:'plank',sets:3,hold:20,yt:'incline plank countertop seniors',en:{n:'Plank on the counter or knees',d:'3 × 20 sec',st:['Put your forearms or hands on the kitchen counter, or kneel with forearms on the floor.','Walk the feet back so the body is a straight line.','Tighten the tummy and hold.','Keep breathing normally.'],tip:'Never hold your breath. Don’t let the hips sag.',ez:'Counter plank, standing more upright, for 10 seconds.'},hi:{n:'काउंटर या घुटनों पर प्लैंक',d:'3 × 20 सेकंड',st:['किचन काउंटर पर कोहनियाँ या हाथ रखें, या घुटनों के बल ज़मीन पर कोहनियाँ टिकाएँ।','पैर पीछे करें ताकि शरीर एक सीधी लाइन में हो।','पेट कसें और रुके रहें।','साँस सामान्य रूप से लेते रहें।'],tip:'साँस कभी न रोकें। कूल्हे नीचे न लटकें।',ez:'काउंटर पर, ज़्यादा सीधे खड़े होकर, 10 सेकंड।'}},
+{id:'carry',sets:2,hold:30,yt:'suitcase carry exercise seniors',en:{n:'Suitcase carry, 3 kg',d:'2 × 30 sec each side',st:['Hold one dumbbell in one hand at your side.','Walk slowly around the room, standing tall.','Don’t lean toward the weight.','Switch hands and repeat.'],tip:'Keep both shoulders level.',ez:'Walk a shorter distance.'},hi:{n:'एक हाथ में डम्बल लेकर चलना',d:'2 × 30 सेकंड हर तरफ़',st:['एक हाथ में डम्बल बगल में पकड़ें।','सीधे खड़े होकर कमरे में धीरे-धीरे चलें।','वज़न की तरफ़ न झुकें।','हाथ बदलकर दोहराएँ।'],tip:'दोनों कंधे बराबर रखें।',ez:'कम दूरी तक चलें।'}},
+{id:'bal',sets:3,hold:20,yt:'balance exercises for seniors single leg stand tandem walk',en:{n:'One-leg stand + heel-to-toe walk',d:'3 × 20 sec each leg',st:['Stand next to the kitchen counter with one hand lightly on it.','Lift one foot and balance for 20 seconds. Switch legs.','After the last round, walk 10 steps putting the heel right in front of the toes, as if on a line.'],tip:'Always keep the counter within reach.',ez:'Hold the counter with both hands.'},hi:{n:'एक पैर पर संतुलन + एड़ी-पंजा चाल',d:'3 × 20 सेकंड हर पैर',st:['किचन काउंटर के पास खड़े हों, एक हाथ हल्के से उस पर।','एक पैर उठाकर 20 सेकंड संतुलन रखें। पैर बदलें।','आख़िरी राउंड के बाद 10 कदम ऐसे चलें कि एड़ी ठीक पंजे के आगे हो, जैसे लाइन पर।'],tip:'काउंटर हमेशा हाथ की पहुँच में रखें।',ez:'दोनों हाथों से काउंटर पकड़ें।'}},
+{id:'mob',sets:1,hold:60,yt:'cat cow hip circles seated twist seniors',en:{n:'Cat-cow, hip circles, seated twist',d:'1 min each',st:['Cat-cow on hands and knees (or seated): round the back up, then gently arch it, with slow breaths.','Hip circles: hands on hips, circle the hips slowly both ways.','Seated twist: sit tall, turn the upper body to one side holding the chair back for 15 seconds, then switch.'],tip:'Gentle, never forced.',ez:'Do all three sitting on a chair.'},hi:{n:'कैट-काउ, कूल्हे घुमाना, बैठकर मोड़ना',d:'हर एक 1 मिनट',st:['कैट-काउ हाथ-घुटनों के बल (या बैठकर): पीठ ऊपर गोल करें, फिर हल्का नीचे झुकाएँ, धीमी साँसें।','कूल्हे घुमाना: हाथ कमर पर, कूल्हे दोनों दिशाओं में धीरे घुमाएँ।','बैठकर मोड़ना: सीधे बैठें, कुर्सी की पीठ पकड़कर ऊपरी शरीर एक तरफ़ 15 सेकंड मोड़ें, फिर बदलें।'],tip:'हल्के से करें, ज़बरदस्ती नहीं।',ez:'तीनों कुर्सी पर बैठकर करें।'}}],
+sunday:[
+{id:'walk',sets:1,yt:'brisk walking tips seniors',en:{n:'Easy walk',d:'20–40 min',st:['Walk at a pace where you can still talk.','Dad: add a 10–15 minute walk after breakfast and after dinner every day.','Mom: split it into short walks of 10 minutes if that’s easier on the knees.','Finish with the cool-down stretches below.'],tip:'Wear good walking shoes. Dad: check the feet for cuts or blisters.',ez:'Start with 3 walks of 10 minutes.'},hi:{n:'आराम से सैर',d:'20–40 मिनट',st:['इतनी रफ़्तार से चलें कि बात कर सकें।','पापा: रोज़ नाश्ते और रात के खाने के बाद 10–15 मिनट की सैर।','माँ: घुटनों के लिए आसान हो तो 10-10 मिनट की छोटी सैर करें।','आख़िर में नीचे दिए कूल-डाउन स्ट्रेच करें।'],tip:'अच्छे जूते पहनें। पापा: पैरों में कट या छाले देखें।',ez:'शुरुआत 10-10 मिनट की 3 सैर से करें।'}}]
+};
+const SAFE={en:[['stop','Stop right away if',['Chest pain, dizziness or a racing heart','Unusual breathlessness or sharp joint pain','Breathe out on every lift. Never hold your breath.']],['mom','Mom (thyroid + weight)',['Do floor moves on the bed if getting down is hard','Knee pain? Squat to a higher chair','Take the thyroid tablet as usual, then exercise']],['dad','Dad (sugar)',['Walk 10–15 min after breakfast and after dinner','On sugar medicine: eat something light first and keep a biscuit nearby','Never skip lower-body days. They help sugar the most.']]],
+hi:[['stop','तुरंत रुकें अगर',['सीने में दर्द, चक्कर या दिल की तेज़ धड़कन','असामान्य रूप से साँस फूलना या जोड़ों में तेज़ दर्द','हर बार उठाते समय साँस छोड़ें। साँस कभी न रोकें।']],['mom','माँ (थायरॉइड + वज़न)',['नीचे बैठना मुश्किल हो तो ज़मीन वाले व्यायाम बिस्तर पर करें','घुटने में दर्द? ऊँची कुर्सी पर स्क्वाट करें','थायरॉइड की गोली रोज़ की तरह लें, फिर व्यायाम करें']],['dad','पापा (शुगर)',['नाश्ते और रात के खाने के बाद 10–15 मिनट सैर','शुगर की दवा लेते हों तो पहले हल्का खाएँ, पास में बिस्किट रखें','निचले शरीर वाले दिन कभी न छोड़ें। शुगर के लिए सबसे अच्छे।']]]};
+
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const dkey=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const now=new Date();
+const todayKey=dkey(now);
+const todayDay=BYDAY[now.getDay()];
+let store={lang:'en',p:{}};
+try{const s=JSON.parse(localStorage.getItem('mdw1')||'null');if(s&&s.p)store=s;}catch(e){}
+const save=()=>{try{localStorage.setItem('mdw1',JSON.stringify(store));}catch(e){}};
+const S={lang:store.lang||'en',day:todayDay,pl:null};
+const tx=k=>UI[S.lang][k];
+const cnt=(id,k)=>((store.p[k||todayKey]||{})[id])||0;
+const setCnt=(id,v)=>{(store.p[todayKey]=store.p[todayKey]||{})[id]=v;save();};
+const dayDone=(day,k)=>day!=='sunday'&&EX[day].every(e=>cnt(e.id,k)>=e.sets);
+const yt=q=>'https://www.youtube.com/results?search_query='+encodeURIComponent(q);
+
+function renderToday(){
+const d=DAYS[todayDay],L=d[S.lang],n=EX[todayDay].length;
+const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+let wk='';
+for(let i=0;i<7;i++){const x=new Date(mon);x.setDate(mon.getDate()+i);const k=dkey(x),dd=BYDAY[x.getDay()];
+wk+='<button type="button" data-a="day" data-v="'+dd+'" class="'+(k===todayKey?'on':'')+'" aria-label="'+UI[S.lang].days[x.getDay()]+'"><b>'+UI[S.lang].days[x.getDay()]+'</b><span>'+x.getDate()+'</span><span class="ck">'+(dayDone(dd,k)||(store.p[k]||{}).__done?'✓':'')+'</span></button>';}
+$('today').style.setProperty('--dc','var('+d.c+')');
+$('today').innerHTML='<div><div class="k">'+tx('today')+' · '+UI[S.lang].days[now.getDay()]+'</div><h2>'+L.t+'</h2><p>'+L.s+' · '+n+' '+tx('ex')+(todayDay==='sunday'?'':' · '+tx('min'))+'</p><button type="button" class="go" data-a="start" data-v="'+todayDay+'">'+tx('start')+'</button></div><div class="week">'+wk+'</div>';
+}
+function renderTabs(){
+$('tabs').innerHTML=Object.keys(DAYS).map(k=>'<button type="button" role="tab" style="--c:var('+DAYS[k].c+')" aria-selected="'+(k===S.day)+'" data-a="day" data-v="'+k+'">'+DAYS[k][S.lang].t+'</button>').join('');
+}
+function card(e,i,day){
+const L=e[S.lang],c=cnt(e.id),full=c>=e.sets;
+let dots='';for(let k=0;k<e.sets;k++)dots+='<button type="button" class="dot'+(k<c?' done':'')+'" data-a="dot" data-ex="'+e.id+'" data-k="'+k+'" aria-label="'+tx('set')+' '+(k+1)+'" aria-pressed="'+(k<c)+'">'+(k+1)+'</button>';
+const tb=e.hold?'<button type="button" data-a="hold" data-ex="'+e.id+'">'+tx('hold')+' '+e.hold+'s</button>':'<button type="button" data-a="rest">'+tx('rest')+'</button>';
+return '<article class="card'+(full?' full':'')+'"><div class="ch"><span class="num">'+(i+1)+'</span><div><h3>'+L.n+'</h3><span class="dose">'+L.d+'</span></div></div><ol>'+L.st.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="note"><b>'+tx('tip')+'</b>'+L.tip+'</div><div class="note easy"><b>'+tx('easy')+'</b>'+L.ez+'</div><div class="cf"><div class="dots"><span>'+tx('sets')+'</span>'+dots+'</div>'+tb+'<a class="vid" href="'+yt(e.yt)+'" target="_blank" rel="noopener">'+tx('video')+' ↗</a></div></article>';
+}
+function mini(list,title){return '<div class="block"><h3>'+title+'</h3><ul class="mini">'+list[S.lang].map(x=>'<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>').join('')+'</ul></div>';}
+function renderView(){
+const d=DAYS[S.day],L=d[S.lang];
+$('view').style.setProperty('--dc','var('+d.c+')');
+$('view').innerHTML='<div class="ch" style="justify-content:space-between;flex-wrap:wrap;margin-bottom:14px"><div><h2>'+L.t+'</h2><div class="small">'+L.s+' · '+L.w+'</div></div><button type="button" data-a="start" data-v="'+S.day+'" style="background:var(--dc);border-color:var(--dc);color:#fff;font-weight:700">'+tx('open')+'</button></div>'+mini(WARM,tx('warm'))+'<div class="grid">'+EX[S.day].map((e,i)=>card(e,i,S.day)).join('')+'</div>'+mini(COOL,tx('cool'));
+}
+function renderSafe(){
+$('safe').innerHTML=SAFE[S.lang].map(b=>'<div class="block'+(b[0]==='stop'?' stop':'')+'"><h3>'+b[1]+'</h3><ul>'+b[2].map(x=>'<li>'+x+'</li>').join('')+'</ul></div>').join('');
+$('foot').textContent=tx('foot');
+}
+function renderAll(){
+document.documentElement.lang=S.lang;
+$('ttl').textContent=tx('title');
+$('l-en').setAttribute('aria-pressed',S.lang==='en');$('l-hi').setAttribute('aria-pressed',S.lang==='hi');
+$('bs').textContent=tx('stop');
+renderToday();renderTabs();renderView();renderSafe();
+if(S.pl)renderPlayer();
+}
+
+let tm={iv:null,end:0,cb:null},ac=null;
+function beep(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=880;g.gain.value=.15;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.35);}catch(e){}}
+function stopTimer(){clearInterval(tm.iv);tm.iv=null;$('bar').classList.remove('on');}
+function startTimer(sec,label,cb){
+stopTimer();try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
+tm.end=Date.now()+sec*1000;tm.cb=cb||null;$('bl').textContent=label;$('bar').classList.add('on');
+const tick=()=>{const l=Math.max(0,Math.ceil((tm.end-Date.now())/1000));$('bt').textContent=Math.floor(l/60)+':'+pad(l%60);if(l<=0){stopTimer();beep();const f=tm.cb;tm.cb=null;if(f)f();}};
+tick();tm.iv=setInterval(tick,250);
+}
+const findEx=id=>{for(const k in EX){const e=EX[k].find(x=>x.id===id);if(e)return e;}return null;};
+
+function renderPlayer(){
+const p=S.pl,list=EX[p.day],d=DAYS[p.day];
+$('pl').style.setProperty('--dc','var('+d.c+')');
+if(p.i>=list.length){
+store.p[todayKey]=store.p[todayKey]||{};store.p[todayKey].__done=true;save();
+$('pl').innerHTML='<div class="pin"><div class="fin"><h2>'+tx('fin')+'</h2><p>'+tx('finP')+'</p></div>'+mini(COOL,tx('cool'))+'<div class="pbtn"><button type="button" class="main" data-a="pclose">'+tx('back')+'</button></div></div>';return;}
+const e=list[p.i],L=e[S.lang],c=cnt(e.id),full=c>=e.sets;
+const pct=Math.round(p.i/list.length*100);
+const mainBtn=full?'<button type="button" class="main" data-a="pnext">'+tx('next')+' →</button>':(e.hold?'<button type="button" class="main" data-a="phold">'+tx('startHold')+' · '+e.hold+'s</button>':'<button type="button" class="main" data-a="pset">'+tx('setDone')+' ('+(c+1)+' '+tx('of')+' '+e.sets+')</button>');
+$('pl').innerHTML='<div class="pin"><div class="ptop"><b>'+d[S.lang].t+' · '+(p.i+1)+' / '+list.length+'</b><button type="button" data-a="pclose">'+tx('close')+'</button></div><div class="prog"><i style="width:'+pct+'%"></i></div><h2>'+L.n+'</h2><span class="dose">'+L.d+' · '+tx('set')+' '+Math.min(c+1,e.sets)+' '+tx('of')+' '+e.sets+'</span><ol>'+L.st.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="note"><b>'+tx('tip')+'</b>'+L.tip+'</div><div class="note easy"><b>'+tx('easy')+'</b>'+L.ez+'</div><a class="vid" href="'+yt(e.yt)+'" target="_blank" rel="noopener">'+tx('video')+' ↗</a><div class="pbtn">'+mainBtn+'<button type="button" data-a="pprev"'+(p.i===0?' disabled':'')+'>← '+tx('prev')+'</button><button type="button" data-a="pnext">'+tx('next')+' →</button></div></div>';
+}
+function setDone(e){
+const c=Math.min(e.sets,cnt(e.id)+1);setCnt(e.id,c);
+if(c<e.sets)startTimer(60,tx('restNow'));
+renderPlayer();renderView();renderToday();
+}
+
+document.addEventListener('click',ev=>{
+const b=ev.target.closest('[data-a]');if(!b)return;
+const a=b.dataset.a,v=b.dataset.v;
+if(a==='lang'){S.lang=v;store.lang=v;save();renderAll();}
+else if(a==='day'){S.day=v;if(location.hash!=='#'+v)history.replaceState(null,'','#'+v);renderTabs();renderView();}
+else if(a==='start'){S.pl={day:v,i:0};const l=EX[v];while(S.pl.i<l.length-1&&cnt(l[S.pl.i].id)>=l[S.pl.i].sets)S.pl.i++;$('pl').classList.add('on');document.body.style.overflow='hidden';renderPlayer();$('pl').scrollTop=0;}
+else if(a==='pclose'){S.pl=null;$('pl').classList.remove('on');document.body.style.overflow='';renderAll();}
+else if(a==='pnext'){S.pl.i++;renderPlayer();$('pl').scrollTop=0;}
+else if(a==='pprev'){S.pl.i=Math.max(0,S.pl.i-1);renderPlayer();$('pl').scrollTop=0;}
+else if(a==='pset'){setDone(EX[S.pl.day][S.pl.i]);}
+else if(a==='phold'){const e=EX[S.pl.day][S.pl.i];startTimer(e.hold,tx('holdNow'),()=>{if(S.pl&&EX[S.pl.day][S.pl.i]===e)setDone(e);else{setCnt(e.id,Math.min(e.sets,cnt(e.id)+1));renderView();}});}
+else if(a==='dot'){const e=findEx(b.dataset.ex),k=+b.dataset.k,c=cnt(e.id);setCnt(e.id,c===k+1?k:k+1);renderView();renderToday();}
+else if(a==='rest'){startTimer(60,tx('restNow'));}
+else if(a==='hold'){const e=findEx(b.dataset.ex);startTimer(e.hold,tx('holdNow'),()=>{setCnt(e.id,Math.min(e.sets,cnt(e.id)+1));renderView();renderToday();});}
+else if(a==='tstop'){stopTimer();}
+});
+const fromHash=()=>{const h=location.hash.slice(1);if(DAYS[h]){S.day=h;renderTabs();renderView();}};
+window.addEventListener('hashchange',fromHash);
+renderAll();fromHash();
+}
+</script>
+</body>
+</html>
